@@ -32,6 +32,11 @@ function render() {
   window.scrollTo(0, 0);
   const heading = app.querySelector('h1');
   if (heading) heading.focus({ preventScroll: true });
+  // On a phone the nav row scrolls horizontally; bring the active item
+  // into view on load. On desktop the row does not scroll, so this is a
+  // no-op. block: 'nearest' keeps the page itself from scrolling.
+  const active = navLinks.find((link) => link.classList.contains('active'));
+  if (active) active.scrollIntoView({ inline: 'center', block: 'nearest' });
 }
 
 window.addEventListener('hashchange', render);
