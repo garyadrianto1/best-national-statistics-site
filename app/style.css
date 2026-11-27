@@ -1,18 +1,19 @@
-/* Statistik Indonesia — design system.
-   Warm paper, deep navy, teal accent. Serif for wordmark, titles and big
-   numbers; system sans for everything else. No webfonts, no imports. */
+/* Statistik Indonesia — design system (round 2).
+   Warm paper, deep navy, teal accent. Serif for wordmark, headings and big
+   numbers; system sans for everything else. No webfonts, no imports.
+   Layout budget at 1280 px: header 64, strip 36, gap 12, hero 124, gap 16,
+   cards 248 (2 x 118 + 12), gap 16, chart row 252, bottom margin 32 = 800. */
 
 :root {
-  --paper: #FAF8F2;
-  --panel: #F2F5F1;
-  --ink: #14213D;
-  --navy: #14213D;
-  --navy-dark: #0B1526;
-  --muted: #5F6672;
-  --line: #E3DED3;
-  --teal: #0F7A63;
-  --amber: #C07A22;
-  --slate: #3F5F8C;
+  --paper: #F7F4EE;
+  --ink: #1E2A30;
+  --navy: #0E2A38;
+  --muted: #5B6B73;
+  --line: #D8E2E0;
+  --teal: #0F7C7B;
+  --amber: #D98E04;
+  --pale-teal: #E6F2F1;
+  --pale-amber: #FBF1DF;
   --brick: #A63A2E;
   --serif: Georgia, "Times New Roman", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -29,128 +30,201 @@ body {
 a { color: var(--teal); }
 a:hover { text-decoration-thickness: 2px; }
 h1, h2, h3 { line-height: 1.25; }
-h1 { font: 700 26px/1.25 var(--serif); margin: 0 0 8px; }
+h1 { font: 700 30px/38px var(--serif); margin: 0; color: var(--navy); }
 h2 { font: 600 18px/1.3 var(--sans); margin: 0 0 12px; }
 h3 { font: 600 16px/1.3 var(--sans); margin: 0 0 8px; }
 p { margin: 0 0 12px; }
 
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 
-/* Header */
+/* Header: 64 px, navy, brand left, seven nav items right. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--navy);
-  color: #FAF8F2;
-  border-bottom: 1px solid var(--navy-dark);
+  color: #FFFFFF;
 }
 .header-inner {
   display: flex;
   align-items: center;
   gap: 24px;
-  min-height: 64px;
+  height: 64px;
 }
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #FAF8F2;
+  color: #FFFFFF;
   text-decoration: none;
   white-space: nowrap;
 }
 .brand-mark { flex: none; }
 .brand-text { font: 700 30px/1 var(--serif); letter-spacing: -0.01em; }
 .brand-tag { font-size: 12px; color: #C9D2DE; }
-.site-nav { margin-left: auto; display: flex; gap: 2px; }
+.site-nav { margin-left: auto; display: flex; align-items: center; gap: 20px; height: 100%; }
 .site-nav a {
-  color: #FAF8F2;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #FFFFFF;
   text-decoration: none;
-  font-size: 14px;
-  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 2px;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
 }
 .site-nav a:hover { border-bottom-color: #C9D2DE; }
-.site-nav a.active { border-bottom-color: var(--teal); font-weight: 600; }
+.site-nav a.active { border-bottom-color: var(--teal); color: #FFFFFF; }
 
-.substrip {
-  background: var(--paper);
-  color: var(--muted);
-  font-size: 12px;
-  padding: 6px 0;
+/* Release strip: 36 px, pale amber, one line, newest verified figure. */
+.strip {
+  background: var(--pale-amber);
   border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink);
 }
+.strip-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.strip-inner strong { flex: none; }
+.strip-inner a { flex: none; }
 
-main { padding: 32px 0 48px; }
-section { margin-bottom: 40px; }
+main { padding: 0 0 32px; }
+section { margin-bottom: 16px; }
 section:last-child { margin-bottom: 0; }
 
-/* Hero */
+/* Heading with the teal accent bar (replaces the v1 teal box). */
+.h1-wrap { display: flex; gap: 12px; align-items: stretch; }
+.accent-bar { flex: none; width: 4px; background: var(--teal); border-radius: 2px; }
+
+/* Hero: 124 px. Headline at 30 px wraps to two lines in the 852 px
+   column; the two buttons sit right, vertically centred. */
+.hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  height: 124px;
+  margin: 12px 0 16px;
+}
+.hero-text { width: 920px; flex: none; }
+.hero-cta {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+}
 .eyebrow {
   font-size: 12px;
+  line-height: 16px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  margin: 0 0 8px;
+  letter-spacing: 1.5px;
+  color: var(--teal);
+  font-weight: 700;
+  margin: 0 0 4px;
 }
-.lede { font-size: 16px; color: var(--ink); max-width: 720px; }
+.lede { font-size: 16px; line-height: 20px; color: var(--ink); margin: 4px 0 0; }
+.btn-primary {
+  display: inline-block;
+  background: var(--teal);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+}
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+}
 .chip {
   display: inline-block;
   font-size: 12px;
   color: var(--teal);
+  background: var(--pale-teal);
   border: 1px solid var(--teal);
   border-radius: 999px;
   padding: 2px 10px;
 }
 .src { font-size: 12px; color: var(--muted); }
-.note { font-size: 13px; color: var(--muted); }
+.note { font-size: 12px; color: var(--muted); }
 
-/* Indicator cards */
+/* Indicator cards: 4 x 2, each 118 px tall.
+   Internals: 10 pad + 11 label + 2 + 26 value + 2 + 12 sub + 2 + 18 spark
+   + 2 + 12 context + 1 + 10 source + 10 pad = 118. */
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
 }
 .card {
-  display: block;
-  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  height: 118px;
+  background: #FFFFFF;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 10px;
   text-decoration: none;
   color: inherit;
 }
 .card:hover { border-color: var(--teal); }
 .card-label {
   display: block;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  line-height: 11px;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
-.card-value { font: 700 30px/1.15 var(--serif); display: block; }
-.card-value small { font-size: 18px; }
-.card-sub { display: block; font: 600 15px/1.4 var(--sans); color: var(--ink); }
-.card-context { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
-.card-context.good { color: var(--teal); }
-.card-context.warn { color: var(--amber); }
-.card .src { display: block; margin-top: 8px; }
+.card-value { font: 700 24px/26px var(--serif); display: block; white-space: nowrap; margin-bottom: 2px; }
+.card-value small { font-size: 15px; font-weight: 600; margin-left: 2px; }
+.card-sub { display: block; font-size: 12px; line-height: 12px; color: var(--ink); margin-bottom: 2px; }
+.spark { display: block; height: 18px; margin-bottom: 2px; }
+.spark svg { display: block; }
+.spark-blank { display: block; height: 18px; margin-bottom: 2px; }
+.card-context { display: block; font-size: 12px; line-height: 12px; color: var(--ink); margin-bottom: 1px; }
+.card-context.down { color: var(--amber); }
+.card .src { display: block; font-size: 10px; line-height: 10px; margin-top: auto; }
 
 /* Panels and charts */
 .panel {
-  background: var(--panel);
+  background: #FFFFFF;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 16px;
 }
+.panel .note { margin: 8px 0 0; }
+.panel p:has(.chip) { margin: 8px 0 0; }
 .chart-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 .chart svg { display: block; width: 100%; height: auto; }
+/* Home cover chart row: 252 px per panel (228 chart + 12 top + 4 bottom
+   padding + 2 border + 6 slack). */
+.home-charts .panel { padding: 12px 12px 4px; height: 252px; }
 
 /* Highlights and tiles */
 .sorotan-row {
@@ -166,31 +240,42 @@ section:last-child { margin-bottom: 0; }
 .sorotan-row a { flex: none; font-size: 14px; white-space: nowrap; }
 .tiles {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
 }
 .tile {
-  display: block;
-  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 12px;
   text-decoration: none;
   color: inherit;
 }
 .tile:hover { border-color: var(--teal); }
-.tile strong { display: block; font: 600 18px/1.3 var(--sans); margin-bottom: 4px; }
-.tile span { font-size: 14px; color: var(--muted); }
+.tile strong { display: block; font: 600 15px/1.3 var(--sans); }
+.tile span { font-size: 12px; line-height: 16px; color: var(--muted); margin-top: 4px; }
 
 /* Lead stat */
 .lead {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--pale-teal);
+  border-radius: 8px;
+  padding: 12px 20px;
 }
-.lead-value { font: 700 30px/1.15 var(--serif); }
-.lead-value small { font-size: 18px; }
+/* The eyebrow inside a lead block must keep its own 12 px / 16 px type:
+   the generic .lead p rule (15 px / 22 px) outranks .eyebrow and would
+   otherwise render it at 22 px tall. */
+.lead .eyebrow { font-size: 12px; line-height: 16px; margin: 0 0 4px; }
+.lead p { font-size: 15px; line-height: 22px; margin: 8px 0 0; }
+/* The value row's line box must match the 32 px / 38 px value, or the
+   paragraph's 22 px strut stretches it to 43 px. */
+.lead p:has(.lead-value) { line-height: 38px; }
+/* Tight lead text (Perdagangan): one line at 14 px so the lead block
+   stays close to its 104 px budget. */
+.lead-tight p { font-size: 14px; line-height: 20px; }
+.lead-value { font: 700 32px/38px var(--serif); color: var(--navy); }
+.lead-value small { font-size: 18px; font-weight: 600; }
 
 /* Definition panel */
 .defs { margin: 0; }
@@ -213,21 +298,27 @@ section:last-child { margin-bottom: 0; }
   color: var(--muted);
 }
 .tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; }
-.tbl tbody tr:nth-child(even) { background: rgba(20, 33, 61, 0.03); }
+.tbl tbody tr:nth-child(even) { background: rgba(14, 42, 56, 0.03); }
 .tbl tfoot td { font-weight: 600; }
+/* Compact table (Perdagangan): 30 px header row, 32 px data rows. */
+.tbl.compact { font-size: 14px; line-height: 20px; }
+.tbl.compact th, .tbl.compact td { padding: 6px 12px; line-height: 20px; }
+/* Tight panel (Perdagangan table): keeps the whole table inside 800 px. */
+.panel-tight { padding: 12px; }
+.panel-tight h2 { margin-bottom: 8px; }
 .table-scroll {
   max-height: 560px;
   overflow: auto;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
+  border-radius: 8px;
+  background: #FFFFFF;
 }
 .table-scroll .tbl { background: transparent; }
 .table-scroll thead th {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: var(--panel);
+  background: #FFFFFF;
 }
 .sort-btn {
   background: none;
@@ -244,6 +335,21 @@ section:last-child { margin-bottom: 0; }
 }
 .sort-btn:hover { color: var(--teal); }
 .sort-btn .arrow { color: var(--teal); font-size: 11px; }
+/* The whole header cell sorts (see wireProvinsi), so the cell shows the
+   pointer cursor, not just the button. */
+th:has(.sort-btn) { cursor: pointer; }
+
+/* Trade page controls: one row (year chips + series toggle) so the chart
+   panel stays at its 236 px budget: 16 pad + 28 controls + 8 gap + 166
+   chart + 16 pad + 2 border. */
+.trade-chart-panel { margin-bottom: 12px; }
+.trade-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 8px;
+}
+.trade-controls .chips { gap: 8px; }
 
 /* Share bars inside the island table */
 .share-bar {
@@ -281,8 +387,8 @@ section:last-child { margin-bottom: 0; }
   border: 1px solid var(--line);
   background: #FFFFFF;
   border-radius: 999px;
-  padding: 6px 12px;
-  font: 13px/1.4 var(--sans);
+  padding: 5px 12px;
+  font: 13px/16px var(--sans);
   color: var(--ink);
   cursor: pointer;
 }
@@ -300,7 +406,7 @@ section:last-child { margin-bottom: 0; }
 .btn:hover { border-color: var(--teal); color: var(--teal); }
 .prov-count { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
 .notice {
-  background: var(--panel);
+  background: #FFFFFF;
   border: 1px solid var(--line);
   border-left: 4px solid var(--amber);
   border-radius: 8px;
@@ -329,56 +435,73 @@ section:last-child { margin-bottom: 0; }
   white-space: nowrap;
 }
 .pill-st { background: var(--teal); }
-.pill-t { background: var(--slate); }
+.pill-t { background: var(--navy); }
 .pill-s { background: var(--amber); }
 .pill-r { background: var(--brick); }
 
 /* Fact rows */
-.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .fact {
-  background: var(--panel);
+  background: #FFFFFF;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 16px;
 }
 .fact-value { font: 700 26px/1.2 var(--serif); display: block; }
 .fact-label { font-size: 14px; color: var(--muted); }
 
-/* Footer */
+/* Footer: navy, reversed text. */
 .site-footer {
-  border-top: 1px solid var(--line);
+  background: var(--navy);
+  color: #C9D2DE;
   padding: 32px 0;
-  color: var(--muted);
   font-size: 14px;
 }
-.foot-brand { font: 700 20px/1.3 var(--serif); color: var(--ink); margin: 0 0 8px; }
-.foot-nav a { color: var(--muted); }
-.foot-nav a:hover { color: var(--teal); }
+.foot-brand { font: 700 20px/1.3 var(--serif); color: #FFFFFF; margin: 0 0 8px; }
+.foot-nav a { color: #C9D2DE; }
+.foot-nav a:hover { color: #FFFFFF; }
 
 :focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
-/* Phone */
+/* The h1 is focused programmatically on every route load (main.js) and
+   is not interactive, so it must not draw the focus outline — the global
+   rule above was boxing every headline. Only the left accent bar shows. */
+h1:focus, h1:focus-visible { outline: none; }
+
+/* Phone: header becomes a 48 px brand row + a 44 px scrollable nav row;
+   every card group stacks in a single column; no horizontal overflow. */
 @media (max-width: 720px) {
   .wrap { padding: 0 16px; }
-  main { padding: 24px 0 32px; }
-  section { margin-bottom: 28px; }
-  .header-inner { flex-wrap: wrap; gap: 0; min-height: 0; padding: 10px 0 0; }
+  main { padding: 0 0 24px; }
+  section { margin-bottom: 16px; }
+  .header-inner { flex-wrap: wrap; gap: 0; height: auto; }
+  .brand { height: 48px; }
   .brand-text { font-size: 22px; }
   .brand-tag { display: none; }
   .site-nav {
     margin-left: 0;
     width: 100%;
+    height: 44px;
     overflow-x: auto;
     scrollbar-width: none;
-    padding-bottom: 8px;
+    gap: 4px;
   }
   .site-nav::-webkit-scrollbar { display: none; }
+  .site-nav a { padding: 0 12px; }
+  .strip-inner { flex-wrap: wrap; height: auto; min-height: 36px; white-space: normal; padding: 6px 16px; row-gap: 2px; }
+  .strip-inner strong { flex-basis: 100%; }
+  .hero { flex-direction: column; align-items: stretch; height: auto; gap: 12px; }
+  .hero-text { width: auto; }
+  .hero h1 { font-size: 24px; line-height: 30px; }
+  .hero-cta { flex-direction: row; align-items: center; justify-content: flex-start; }
   .cards { grid-template-columns: 1fr; }
+  .card { height: auto; }
   .chart-row { grid-template-columns: 1fr; }
-  .tiles { grid-template-columns: 1fr 1fr; }
+  .home-charts .panel { height: auto; }
+  .tiles { grid-template-columns: 1fr; }
   .facts { grid-template-columns: 1fr; }
   .panel { padding: 16px; }
-  .card { padding: 16px; }
+  .card { padding: 12px; }
   .sorotan-row { flex-wrap: wrap; gap: 4px; }
   .sorotan-row strong { max-width: none; }
   .table-scroll { overflow-x: auto; }
@@ -386,7 +509,7 @@ section:last-child { margin-bottom: 0; }
   .table-scroll th:first-child, .table-scroll td:first-child {
     position: sticky;
     left: 0;
-    background: var(--panel);
+    background: #FFFFFF;
     z-index: 1;
   }
   .table-scroll thead th:first-child { z-index: 3; }
