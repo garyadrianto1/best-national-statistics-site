@@ -1,8 +1,9 @@
 /* Statistik Indonesia — design system (round 2).
    Warm paper, deep navy, teal accent. Serif for wordmark, headings and big
    numbers; system sans for everything else. No webfonts, no imports.
-   Layout budget at 1280 px: header 64, strip 36, gap 12, hero 124, gap 16,
-   cards 248 (2 x 118 + 12), gap 16, chart row 252, bottom margin 32 = 800. */
+   Layout budget at 1280 px (R3): header 64, strip 36, gap 12, hero 124,
+   gap 16, cards 248 (2 x 118 + 12), province strip 48 (32 + 8 + 8),
+   chart row 216, bottom margin 32 = 796. */
 
 :root {
   --paper: #F7F4EE;
@@ -222,9 +223,42 @@ section:last-child { margin-bottom: 0; }
   gap: 12px;
 }
 .chart svg { display: block; width: 100%; height: auto; }
-/* Home cover chart row: 252 px per panel (228 chart + 12 top + 4 bottom
-   padding + 2 border + 6 slack). */
-.home-charts .panel { padding: 12px 12px 4px; height: 252px; }
+/* Home cover chart row (R3): 216 px per panel (160 chart + 8 toggle gap +
+   30 toggle + 12 top + 4 bottom padding + 2 border). min-width: 0 keeps
+   the toggle table (min-width 560 px) from widening the grid track on a
+   phone: the table then scrolls inside its panel instead. */
+.home-charts .panel { padding: 12px 12px 4px; height: 216px; min-width: 0; }
+
+.chart-toggle {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  font: 600 13px/16px var(--sans);
+  color: var(--teal);
+  background: #FFFFFF;
+  border: 1px solid var(--teal);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chart-toggle:hover { background: var(--pale-teal); }
+.chart-toggle:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.chart[hidden], .chart-table[hidden] { display: none; }
+/* Toggle tables use tighter rows so the 5-row table fits the 160 px slot. */
+.chart-table .tbl { font-size: 13px; line-height: 18px; }
+.chart-table .tbl th, .chart-table .tbl td { padding: 3px 10px; line-height: 18px; }
+
+/* Province strip (R3): one line under the cards, on the cover. */
+.prov-strip {
+  margin: 8px 0;
+  padding: 6px 12px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.prov-strip p { margin: 0; }
+.prov-strip .src { font-size: 12px; color: var(--muted); }
 
 /* Highlights and tiles */
 .sorotan-row {
