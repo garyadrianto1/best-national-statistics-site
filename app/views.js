@@ -165,12 +165,17 @@ function cardHTML(card) {
 
 export function renderHome() {
   const cards = INDICATORS.map(cardHTML).join('');
+  // Province strip (R3): extremes read from the verified 37-province table
+  // in data.js, never typed from memory.
+  const sortedProv = [...PROVINCES].sort((a, b) => b.ipm - a.ipm);
+  const topProv = sortedProv[0];
+  const bottomProv = sortedProv[sortedProv.length - 1];
   return `
   <section class="hero">
     <div class="hero-text">
       <p class="eyebrow">Ringkasan Nasional</p>
-      <div class="h1-wrap"><span class="accent-bar" aria-hidden="true"></span><h1 tabindex="-1">Dengan penduduk 284,44 juta jiwa pada 2025, Indonesia mencatat PDB Rp23.821,1 triliun dan pertumbuhan ekonomi 5,11%.</h1></div>
-      <p class="lede">Ringkasan BPS 2025 ini menyatukan skala penduduk, besar PDB, dan laju pertumbuhan dalam satu gambaran.</p>
+      <div class="h1-wrap"><span class="accent-bar" aria-hidden="true"></span><h1 tabindex="-1">Pengangguran terendah sejak 1995 — 7,22 juta orang masih mencari kerja.</h1></div>
+      <p class="lede">Dengan penduduk 284,44 juta jiwa pada 2025, Indonesia mencatat PDB Rp23.821,1 triliun dan pertumbuhan ekonomi 5,11%.</p>
     </div>
     <div class="hero-cta">
       <a class="btn-primary" href="#/provinsi">Lihat tabel provinsi</a>
@@ -178,9 +183,20 @@ export function renderHome() {
     </div>
   </section>
   <section class="cards" aria-label="Indikator utama">${cards}</section>
+  <section class="prov-strip" aria-label="Sorotan provinsi">
+    <p>IPM tertinggi <strong>${esc(topProv.name)} ${idNum(topProv.ipm)}</strong> — terendah <strong>${esc(bottomProv.name)} ${idNum(bottomProv.ipm)}</strong> <span class="src">BPS, 2024</span> · Semua angka terverifikasi · BPS · <a href="#/provinsi">Lihat 37 provinsi →</a></p>
+  </section>
   <section class="chart-row home-charts">
-    <div class="panel"><div class="chart" data-chart="growth" data-height="228"></div></div>
-    <div class="panel"><div class="chart" data-chart="population" data-height="228"></div></div>
+    <div class="panel chart-panel">
+      <div class="chart" data-chart="growth" data-height="160"></div>
+      <div class="chart-table table-scroll" data-table="growth" hidden></div>
+      <button type="button" class="chart-toggle" data-toggle="growth" aria-expanded="false">Lihat sebagai tabel</button>
+    </div>
+    <div class="panel chart-panel">
+      <div class="chart" data-chart="population" data-height="160"></div>
+      <div class="chart-table table-scroll" data-table="population" hidden></div>
+      <button type="button" class="chart-toggle" data-toggle="population" aria-expanded="false">Lihat sebagai tabel</button>
+    </div>
   </section>
   <section class="panel">
     <h2>Sorotan</h2>
@@ -581,7 +597,39 @@ export const PAGES = {
 };
 
 // Wire page-specific controls after the markup is in the document.
+// Home chart↔table toggles (R3): same verified series as the chart, shown
+// as a table. Built lazily on first toggle; the chart slot is untouched by
+// mountCharts on resize (only its innerHTML is repainted), so the toggle
+// state survives.
+function seriesTable(key) {
+  if (key === 'growth') {
+    return `<table class="tbl compact"><thead><tr><th>Tahun</th><th class="num">Pertumbuhan (%)</th><th>Sumber</th></tr></thead><tbody>${GROWTH.map((g) => `<tr><td>${g.label}</td><td class="num">${idNum(g.value)}</td><td>BPS, 2025</td></tr>`).join('')}</tbody></table>`;
+  }
+  return `<table class="tbl compact"><thead><tr><th>Tahun</th><th class="num">Penduduk (juta jiwa)</th><th>Sumber</th></tr></thead><tbody>${POPULATION.map((p) => `<tr><td>${p.label}</td><td class="num">${idNum(p.value)}</td><td>BPS, 2025</td></tr>`).join('')}</tbody></table>`;
+}
+
+function wireHome(root) {
+  root.querySelectorAll('.chart-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.toggle;
+      const panel = btn.closest('.chart-panel');
+      const chart = panel.querySelector('.chart');
+      const table = panel.querySelector('.chart-table');
+      const showTable = !chart.hidden;
+      if (showTable && !table.dataset.built) {
+        table.innerHTML = seriesTable(key);
+        table.dataset.built = '1';
+      }
+      chart.hidden = showTable;
+      table.hidden = !showTable;
+      btn.textContent = showTable ? 'Lihat sebagai grafik' : 'Lihat sebagai tabel';
+      btn.setAttribute('aria-expanded', String(showTable));
+    });
+  });
+}
+
 export function wirePage(route, root) {
+  if (route === '') wireHome(root);
   if (route === 'provinsi') wireProvinsi(root);
   if (route === 'perdagangan') wirePerdagangan(root);
 }
